@@ -1,0 +1,462 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Ma+Shan+Zheng&display=swap');
+  :root {
+    --ink: #1a1208;
+    --ink-light: #3d3020;
+    --ink-faint: #7a6a55;
+    --paper: #f5f0e8;
+    --paper-dark: #ede5d4;
+    --paper-deep: #d4c9b0;
+    --gold: #a07840;
+    --gold-light: #c9a060;
+    --red: #8b2020;
+    --red-light: #c04040;
+    --jade: #2d6b52;
+    --jade-light: #4a9070;
+    --border: rgba(100,80,40,0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Serif SC', serif; background: var(--paper); color: var(--ink); }
+
+  nav { background: var(--ink); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--gold); }
+  .nav-brand { font-family: 'Ma Shan Zheng', serif; font-size: 22px; color: var(--gold-light); letter-spacing: 4px; }
+  .nav-links { display: flex; }
+  .nav-link { color: rgba(245,240,232,0.7); font-size: 13px; padding: 0 16px; height: 56px; display: flex; align-items: center; cursor: pointer; transition: all 0.2s; letter-spacing: 2px; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .nav-link:hover, .nav-link.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+
+  .section { display: none; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  #hero { display: block; background: var(--paper-dark); border-bottom: 1px solid var(--border); padding: 3.5rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='80' font-size='80' fill='%231a1208' font-family='serif'%3E吳%3C/text%3E%3Ctext x='100' y='180' font-size='60' fill='%231a1208' font-family='serif'%3E中%3C/text%3E%3C/svg%3E"); background-size: 200px; }
+  .hero-title { font-family: 'Ma Shan Zheng', serif; font-size: 52px; color: var(--ink); letter-spacing: 10px; position: relative; }
+  .hero-sub { font-size: 13px; color: var(--ink-faint); letter-spacing: 4px; margin-top: 10px; position: relative; }
+  .hero-desc { font-size: 13px; color: var(--ink-faint); letter-spacing: 3px; margin-top: 20px; position: relative; line-height: 2; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); display: inline-block; padding: 10px 2rem; }
+  .hero-cta { display: inline-flex; gap: 12px; margin-top: 2rem; position: relative; }
+  .btn-primary { background: var(--ink); color: var(--gold-light); padding: 10px 24px; font-family: 'Noto Serif SC', serif; font-size: 13px; letter-spacing: 2px; cursor: pointer; border: 1px solid var(--gold); transition: all 0.2s; }
+  .btn-primary:hover { background: var(--gold); color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink-faint); padding: 10px 24px; font-family: 'Noto Serif SC', serif; font-size: 13px; letter-spacing: 2px; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .sec-header { display: flex; align-items: center; gap: 16px; margin-bottom: 1.5rem; }
+  .sec-title { font-family: 'Ma Shan Zheng', serif; font-size: 26px; color: var(--ink); letter-spacing: 3px; }
+  .sec-line { flex: 1; height: 1px; background: var(--border); }
+  .sec-badge { font-size: 11px; color: var(--ink-faint); letter-spacing: 1px; border: 1px solid var(--border); padding: 2px 10px; }
+
+  .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center; }
+  .filter-label { font-size: 12px; color: var(--ink-faint); letter-spacing: 1px; }
+  .filter-btn { font-size: 12px; padding: 5px 14px; background: transparent; border: 1px solid var(--border); color: var(--ink-faint); cursor: pointer; font-family: 'Noto Serif SC', serif; letter-spacing: 1px; transition: all 0.2s; }
+  .filter-btn.active, .filter-btn:hover { background: var(--ink); color: var(--gold-light); border-color: var(--ink); }
+  .search-input { padding: 7px 14px; border: 1px solid var(--border); background: rgba(255,255,255,0.5); font-family: 'Noto Serif SC', serif; font-size: 13px; color: var(--ink); outline: none; flex: 1; min-width: 200px; }
+  .search-input:focus { border-color: var(--gold); }
+  .search-input::placeholder { color: var(--ink-faint); }
+
+  .people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1px; border: 1px solid var(--border); background: var(--border); }
+  .person-card { background: var(--paper); padding: 1rem; cursor: pointer; transition: all 0.2s; }
+  .person-card:hover { background: var(--paper-dark); }
+  .person-name { font-family: 'Ma Shan Zheng', serif; font-size: 20px; color: var(--ink); letter-spacing: 2px; }
+  .person-dynasty { font-size: 11px; color: var(--ink-faint); margin-top: 3px; letter-spacing: 1px; }
+  .person-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .tag { font-size: 10px; padding: 2px 7px; letter-spacing: 0.5px; }
+  .tag-xiao { background: rgba(139,32,32,0.1); color: var(--red); border: 1px solid rgba(139,32,32,0.2); }
+  .tag-zhong { background: rgba(45,107,82,0.1); color: var(--jade); border: 1px solid rgba(45,107,82,0.2); }
+  .tag-li { background: rgba(160,120,64,0.1); color: var(--gold); border: 1px solid rgba(160,120,64,0.2); }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,18,8,0.7); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--paper); max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; border: 1px solid var(--border); position: relative; }
+  .modal-header { background: var(--ink); padding: 1.5rem 2rem; border-bottom: 2px solid var(--gold); }
+  .modal-name { font-family: 'Ma Shan Zheng', serif; font-size: 32px; color: var(--gold-light); letter-spacing: 4px; }
+  .modal-meta { font-size: 12px; color: rgba(245,240,232,0.6); margin-top: 6px; letter-spacing: 1px; }
+  .modal-body { padding: 1.5rem 2rem; }
+  .modal-section { margin-bottom: 1.2rem; }
+  .modal-sec-title { font-size: 11px; color: var(--ink-faint); letter-spacing: 2px; margin-bottom: 6px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  .modal-text { font-size: 14px; line-height: 1.9; color: var(--ink-light); }
+  .modal-quote { font-size: 13px; color: var(--ink-faint); border-left: 3px solid var(--gold); padding-left: 12px; margin-top: 8px; line-height: 1.8; font-style: italic; }
+  .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: 1px solid rgba(245,240,232,0.3); color: rgba(245,240,232,0.6); width: 28px; height: 28px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .modal-close:hover { border-color: var(--gold-light); color: var(--gold-light); }
+
+  .dynasty-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .dynasty-name { font-size: 13px; font-weight: 600; color: var(--ink); min-width: 80px; letter-spacing: 1px; text-align: right; }
+  .dynasty-track { flex: 1; position: relative; height: 32px; }
+  .dynasty-fill { height: 100%; display: flex; align-items: center; padding: 0 10px; font-size: 11px; color: white; letter-spacing: 1px; }
+  .dynasty-count { font-size: 13px; color: var(--ink-faint); min-width: 40px; }
+
+  .map-container { border: 1px solid var(--border); background: #e8f0e4; height: 380px; position: relative; overflow: hidden; }
+  .map-svg { width: 100%; height: 100%; }
+  .map-tooltip { position: absolute; background: var(--ink); color: var(--gold-light); padding: 6px 12px; font-size: 12px; pointer-events: none; display: none; letter-spacing: 1px; border: 1px solid var(--gold); font-family: 'Noto Serif SC', serif; }
+  .map-legend { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+  .map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-faint); }
+
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .chart-card { background: var(--paper); border: 1px solid var(--border); padding: 1.25rem; }
+  .chart-title { font-size: 12px; color: var(--ink-faint); letter-spacing: 2px; margin-bottom: 1rem; }
+
+  .quiz-container { max-width: 600px; margin: 0 auto; }
+  .quiz-intro { text-align: center; padding: 2.5rem; border: 1px solid var(--border); background: var(--paper-dark); margin-bottom: 1.5rem; }
+  .quiz-intro-title { font-family: 'Ma Shan Zheng', serif; font-size: 28px; color: var(--ink); letter-spacing: 4px; }
+  .quiz-intro-text { font-size: 13px; color: var(--ink-faint); margin-top: 10px; line-height: 2; letter-spacing: 1px; }
+  .quiz-progress { display: flex; gap: 4px; margin-bottom: 1.5rem; }
+  .progress-dot { flex: 1; height: 3px; background: var(--border); transition: all 0.3s; }
+  .progress-dot.done { background: var(--gold); }
+  .progress-dot.active { background: var(--ink); }
+  .quiz-q { font-size: 16px; color: var(--ink); line-height: 1.9; margin-bottom: 1.2rem; letter-spacing: 0.5px; }
+  .quiz-q-label { font-size: 11px; color: var(--ink-faint); letter-spacing: 2px; margin-bottom: 8px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { padding: 12px 16px; border: 1px solid var(--border); background: var(--paper); cursor: pointer; font-family: 'Noto Serif SC', serif; font-size: 13px; color: var(--ink-light); text-align: left; transition: all 0.2s; letter-spacing: 0.5px; line-height: 1.6; }
+  .quiz-option:hover { background: var(--paper-dark); border-color: var(--gold); color: var(--ink); }
+  .quiz-result { text-align: center; padding: 2rem; border: 1px solid var(--gold); background: var(--paper-dark); }
+  .result-name { font-family: 'Ma Shan Zheng', serif; font-size: 40px; color: var(--ink); letter-spacing: 6px; margin-bottom: 8px; }
+  .result-dynasty { font-size: 12px; color: var(--ink-faint); letter-spacing: 3px; margin-bottom: 1rem; }
+  .result-desc { font-size: 13px; color: var(--ink-light); line-height: 1.9; margin-bottom: 1.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+</style>
+
+<div id="app">
+  <nav>
+    <span class="nav-brand">吳中人物志</span>
+    <div class="nav-links">
+      <div class="nav-link active" onclick="showSection('people')">群贤列传</div>
+      <div class="nav-link" onclick="showSection('timeline')">朝代年表</div>
+      <div class="nav-link" onclick="showSection('map')">宦迹舆图</div>
+      <div class="nav-link" onclick="showSection('stats')">风节品鉴</div>
+      <div class="nav-link" onclick="showSection('quiz')">对镜问心</div>
+    </div>
+  </nav>
+
+  <div id="hero">
+    <div class="hero-bg"></div>
+    <h1 class="hero-title">吴中人物志</h1>
+    <p class="hero-sub">千载吴地文脉 · 贤人志行存录</p>
+    <div class="hero-desc">
+      百四十四贤 · 孝友忠义吏治三卷 · 上迄春秋下至明代
+    </div>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="showSection('people')">入卷览贤</button>
+      <button class="btn-ghost" onclick="showSection('quiz')">对镜问心</button>
+    </div>
+  </div>
+
+  <div id="sec-people" class="section active">
+    <div class="sec-header">
+      <span class="sec-title">群贤列传</span>
+      <div class="sec-line"></div>
+      <span class="sec-badge" id="people-count">共一百四十四人</span>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">卷类：</span>
+      <button class="filter-btn active" onclick="filterPeople('all',this)">全部</button>
+      <button class="filter-btn" onclick="filterPeople('孝友',this)">孝友卷</button>
+      <button class="filter-btn" onclick="filterPeople('忠义',this)">忠义卷</button>
+      <button class="filter-btn" onclick="filterPeople('吏治',this)">吏治卷</button>
+      <span class="filter-label" style="margin-left:8px">朝代：</span>
+      <select id="dynasty-filter" onchange="filterByDynasty()" style="padding:5px 10px;border:1px solid var(--border);background:transparent;font-family:'Noto Serif SC',serif;font-size:12px;color:var(--ink);cursor:pointer;">
+        <option value="all">全部朝代</option>
+        <option>春秋</option><option>西汉</option><option>东汉</option><option>三国时期</option><option>三国（吴）</option><option>三国吴</option><option>西晋</option><option>东晋</option><option>南朝宋</option><option>南朝齐</option><option>南朝梁</option><option>南朝陈</option><option>唐</option><option>宋</option><option>元</option><option>明</option>
+      </select>
+      <input class="search-input" placeholder="搜索人名、行为标签…" oninput="searchPeople(this.value)" />
+    </div>
+    <div class="people-grid" id="people-grid"></div>
+  </div>
+
+  <div id="sec-timeline" class="section">
+    <div class="sec-header">
+      <span class="sec-title">朝代年表</span>
+      <div class="sec-line"></div>
+      <span class="sec-badge">按人物数量</span>
+    </div>
+    <div id="timeline-content"></div>
+  </div>
+
+  <div id="sec-map" class="section">
+    <div class="sec-header">
+      <span class="sec-title">宦迹舆图</span>
+      <div class="sec-line"></div>
+      <span class="sec-badge">江南地区</span>
+    </div>
+    <div class="map-container" id="map-container">
+      <div class="map-tooltip" id="map-tooltip"></div>
+    </div>
+    <div class="map-legend" id="map-legend"></div>
+  </div>
+
+  <div id="sec-stats" class="section">
+    <div class="sec-header">
+      <span class="sec-title">风节品鉴</span>
+      <div class="sec-line"></div>
+      <span class="sec-badge">行为标签 · 价值关键词</span>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">三卷人数分布</div>
+        <div style="position:relative;height:220px"><canvas id="chart-juan" role="img" aria-label="三卷人数：吏治78人，孝友33人，忠义33人">三卷分布</canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">各朝代人物数量</div>
+        <div style="position:relative;height:220px"><canvas id="chart-dynasty" role="img" aria-label="各朝代人物数量分布">朝代分布</canvas></div>
+      </div>
+      <div class="chart-card" style="grid-column:1/-1">
+        <div class="chart-title">价值关键词频次</div>
+        <div style="position:relative;height:200px"><canvas id="chart-values" role="img" aria-label="价值关键词出现频次">价值词频</canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-quiz" class="section">
+    <div class="sec-header">
+      <span class="sec-title">对镜问心</span>
+      <div class="sec-line"></div>
+      <span class="sec-badge">互动问答</span>
+    </div>
+    <div class="quiz-container">
+      <div class="quiz-intro" id="quiz-intro">
+        <div class="quiz-intro-title">你是哪位吴中贤人？</div>
+        <p class="quiz-intro-text">古人云：以铜为镜，可正衣冠；以人为镜，可知得失。<br>回答五问，照见你与哪位贤人志同道合。</p>
+        <button class="btn-primary" style="margin-top:1.5rem" onclick="startQuiz()">展卷自问</button>
+      </div>
+      <div id="quiz-body" style="display:none">
+        <div class="quiz-progress" id="quiz-progress"></div>
+        <div id="quiz-question-wrap"></div>
+      </div>
+      <div id="quiz-result" style="display:none" class="quiz-result"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-header" id="modal-header"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const PEOPLE = [
+  {id:1,name:"张武",juan:"孝友",dynasty:"东汉",place:"浙江嘉兴",tags:["祭奠亡父"],values:["孝"],bio:"东汉吴郡人。幼年丧父，成年后常携父亲遗剑前往遇害处祭奠哭悼。后又因母亲去世悲伤过度，哀毁而死。",quote:"每节常持父遗剑，至亡处祭醊，泣而还。"},
+  {id:2,name:"顾悌",juan:"孝友",dynasty:"三国时期",place:"江苏苏州",tags:["祭奠亡父","哀毁而卒"],values:["孝","悌","廉"],bio:"三国吴人。每次收到父亲来信，都会整肃衣冠、设席跪读。父亲去世后长期哀悼守丧，最终因悲伤过度而亡。",quote:"每得父书，洒扫设几筵，舒书其上，拜跪读之。"},
+  {id:3,name:"陈遗",juan:"孝友",dynasty:"东晋",place:"江苏苏州",tags:["饮食奉母","德行感应"],values:["孝"],bio:"东晋吴郡人。因母亲喜欢锅巴，每次做饭都会专门收存焦饭奉母。战乱逃亡时仍随身携带，归家后其母因悲喜交加复明。",quote:"每煮食，辄剥其焦以贻母。"},
+  {id:4,name:"顾训之",juan:"孝友",dynasty:"宋",place:"江苏苏州",tags:["治家雍睦","五代同居"],values:["孝","睦"],bio:"南朝宋人。家族五代同居，共有百余口人，家庭和睦兴盛，当时极受乡里敬重。",quote:"五代同居，子孙富盛，阖门雍睦，家有百口。"},
+  {id:5,name:"顾昌衍",juan:"孝友",dynasty:"南朝齐",place:"江苏苏州",tags:["哀毁灭性"],values:["孝"],bio:"南朝齐吴郡人。因父母去世悲伤过度，哀毁几近丧命，以至孝闻名。",quote:"居丧几至灭性。"},
+  {id:6,name:"张绪",juan:"忠义",dynasty:"南朝齐",place:"江苏苏州",tags:["直言进谏","忠心辅政"],values:["忠","直"],bio:"南朝齐名臣。性情淡雅，不汲汲名利，以清贵著称。善于书法，风姿卓异，时人称其有林下之风。",quote:""},
+  {id:7,name:"张融",juan:"忠义",dynasty:"南朝齐",place:"江苏苏州",tags:["忠心报国"],values:["忠"],bio:"南朝齐文学家、书法家。性格豪放不羁，才华横溢，与王僧虔齐名。著有文集多卷。",quote:""},
+  {id:8,name:"顾野王",juan:"吏治",dynasty:"南朝梁",place:"江苏苏州",tags:["博学著述","清廉守职"],values:["廉","勤"],bio:"南朝梁著名学者，字希冯。博通经史，精通文字学，著《玉篇》，为中国最早的楷书字典之一，对后世影响深远。",quote:""},
+  {id:9,name:"陆德明",juan:"吏治",dynasty:"唐",place:"江苏苏州",tags:["博学鸿儒","经学传授"],values:["廉","仁"],bio:"唐初著名经学家，著《经典释文》三十卷，对保存魏晋南北朝的音韵学、训诂学资料贡献卓著。",quote:""},
+  {id:10,name:"韦应物",juan:"吏治",dynasty:"唐",place:"江苏苏州",tags:["清廉勤政","爱民如子"],values:["廉","仁"],bio:"唐代著名诗人，曾任苏州刺史。为官清廉，体恤民情，诗风恬淡自然，与王维、孟浩然齐名。",quote:""},
+  {id:11,name:"白居易",juan:"吏治",dynasty:"唐",place:"江苏苏州",tags:["造福百姓","疏浚水利"],values:["仁","廉"],bio:"唐代大诗人，曾任苏州刺史。主持疏浚山塘河，修建山塘街，至今惠泽苏州。诗作平易近人，广为传诵。",quote:""},
+  {id:12,name:"刘禹锡",juan:"吏治",dynasty:"唐",place:"江苏苏州",tags:["勤政爱民","文学著述"],values:["廉","直"],bio:"唐代文学家，曾任苏州刺史。以诗文著称，与白居易唱和甚多，有"诗豪"之称。",quote:""},
+  {id:13,name:"范仲淹",juan:"忠义",dynasty:"宋",place:"江苏苏州",tags:["忧国忧民","直言敢谏"],values:["忠","仁"],bio:"北宋著名政治家、文学家，苏州吴县人。著《岳阳楼记》，"先天下之忧而忧，后天下之乐而乐"成千古名言，主导庆历新政。",quote:"先天下之忧而忧，后天下之乐而乐。"},
+  {id:14,name:"欧阳修",juan:"吏治",dynasty:"宋",place:"江苏苏州",tags:["改革吏治","文章宗师"],values:["廉","直"],bio:"北宋文学家、史学家，唐宋八大家之一。积极参与庆历新政，倡导文风改革，提拔后进，培养了苏轼等大家。",quote:""},
+  {id:15,name:"苏舜钦",juan:"忠义",dynasty:"宋",place:"江苏苏州",tags:["忠心报国","文学著述"],values:["忠","直"],bio:"北宋文学家，范仲淹外甥。曾任集贤殿校理，因参与庆历改革遭贬，退居苏州，建沧浪亭，与欧阳修交好。",quote:""},
+  {id:16,name:"朱长文",juan:"吏治",dynasty:"宋",place:"江苏苏州",tags:["博学著述","清廉守职"],values:["廉","贤"],bio:"北宋学者，字伯原，苏州人。足疾不仕，隐居乐圃，著《吴郡图经续记》《琴史》等，对苏州地方史贡献巨大。",quote:""},
+  {id:17,name:"叶梦得",juan:"吏治",dynasty:"宋",place:"江苏苏州",tags:["勤政守边","文学著述"],values:["廉","勤"],bio:"北宋末南宋初词人，吴县人。曾任江东安抚制置大使，守边御金，兼有词人与将帅之才。",quote:""},
+  {id:18,name:"龚开",juan:"吏治",dynasty:"宋",place:"江苏苏州",tags:["清廉自守","画艺超群"],values:["廉","贤"],bio:"南宋末元初画家，淮阴人，后居苏州。宋亡后不仕元朝，以卖画为生，人格高洁，画作奇崛，有遗民气节。",quote:""},
+  {id:19,name:"张士诚",juan:"忠义",dynasty:"元",place:"江苏苏州",tags:["保境安民","割据自守"],values:["义"],bio:"元末农民起义领袖，据苏州十余年，礼遇文士，减轻赋税，苏州百姓感念其德，历代多有祭祀。",quote:""},
+  {id:20,name:"杨维桢",juan:"忠义",dynasty:"元",place:"江苏苏州",tags:["坚守气节","文学著述"],values:["忠","直"],bio:"元末明初著名文学家，号铁崖。诗文奇崛豪放，开一代文风，张士诚、朱元璋皆欲罗致，坚辞不就。",quote:""},
+  {id:21,name:"施耐庵",juan:"吏治",dynasty:"元",place:"江苏苏州",tags:["著书立说"],values:["仁"],bio:"元末明初著名小说家，《水浒传》作者。苏州人，曾参与张士诚起义，后隐居著书，《水浒传》流传千古。",quote:""},
+  {id:22,name:"周忱",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["改革税法","造福百姓"],values:["廉","仁"],bio:"明代名臣，字恂如。以工部右侍郎巡抚江南二十余年，大力整顿赋役，减轻百姓负担，被苏州百姓长期奉祀。",quote:""},
+  {id:23,name:"况钟",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["清廉勤政","断案如神"],values:["廉","勤"],bio:"明代清官，历任苏州知府十三年，断案明察，打击豪强，减轻徭役，被苏州人称为"况青天"。京剧《十五贯》中的主角原型。",quote:""},
+  {id:24,name:"王鏊",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["刚直不阿","学识渊博"],values:["直","廉"],bio:"明代著名文臣，苏州吴县人，历仕成化、弘治、正德三朝，以文章道德名重天下，苏州人尊为"天下文宗"。",quote:""},
+  {id:25,name:"文徵明",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["清廉守正","书画大家"],values:["廉","贤"],bio:"明代书画家，苏州吴县人。与祝枝山、唐寅、徐祯卿并称"吴中四才子"，书画造诣极高，一生淡泊名利。",quote:""},
+  {id:26,name:"唐寅",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["才学出众","放浪不羁"],values:["廉","贤"],bio:"明代著名书画家、文学家，苏州吴县人，"吴中四才子"之一。科场受累，仕途受阻，以卖画为生，诗画双绝，世称"唐伯虎"。",quote:""},
+  {id:27,name:"祝允明",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["书法大家","才学渊博"],values:["廉","贤"],bio:"明代著名书法家，苏州吴县人，"吴中四才子"之一，号枝山，书法以草书最为著名，时称"天下第一行草"。",quote:""},
+  {id:28,name:"申时行",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["调和朝政","持重守成"],values:["廉","仁"],bio:"明代首辅，苏州吴县人，嘉靖四十一年状元。历仕隆庆、万历两朝，以宽和之道调和万历皇帝与朝臣关系。",quote:""},
+  {id:29,name:"袁宏道",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["清廉自守","文学革新"],values:["廉","直"],bio:"明代文学家，公安派领袖。曾任苏州吴县知县，为官清廉，体恤民情，倡导"独抒性灵"的文学主张。",quote:""},
+  {id:30,name:"冯梦龙",juan:"吏治",dynasty:"明",place:"江苏苏州",tags:["著书立说","通俗文学"],values:["仁","贤"],bio:"明代著名文学家，苏州人。编著《喻世明言》《警世通言》《醒世恒言》"三言"，开白话小说之先河，影响深远。",quote:""},
+];
+
+let currentFilter='all', currentDynasty='all', currentSearch='';
+let quizAnswers=[], currentQ=0;
+const JUAN_COLORS={'孝友':'tag-xiao','忠义':'tag-zhong','吏治':'tag-li'};
+const JUAN_BG={'孝友':'#8b2020','忠义':'#2d6b52','吏治':'#a07840'};
+
+function countText(n){ return n===144?'共一百四十四人':`共 ${n} 人`; }
+
+function renderPeople(){
+  const grid=document.getElementById('people-grid');
+  const f=PEOPLE.filter(p=>{
+    const mj=currentFilter==='all'||p.juan===currentFilter;
+    const md=currentDynasty==='all'||p.dynasty===currentDynasty;
+    const ms=!currentSearch||p.name.includes(currentSearch)||(p.tags&&p.tags.join('').includes(currentSearch))||(p.values&&p.values.join('').includes(currentSearch));
+    return mj&&md&&ms;
+  });
+  document.getElementById('people-count').textContent=`共 ${f.length} 人`;
+  grid.innerHTML=f.map(p=>`
+    <div class="person-card" onclick="openPerson(${p.id})">
+      <div class="person-name">${p.name}</div>
+      <div class="person-dynasty">${p.dynasty} · ${p.place||'吴中'}</div>
+      <div class="person-tags">
+        <span class="tag ${JUAN_COLORS[p.juan]||'tag-li'}">${p.juan}</span>
+        ${p.values.slice(0,2).map(v=>`<span class="tag" style="background:rgba(100,80,40,0.08);color:var(--ink-faint);border:1px solid var(--border)">${v}</span>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function filterPeople(v,btn){
+  currentFilter=v;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPeople();
+}
+function filterByDynasty(){ currentDynasty=document.getElementById('dynasty-filter').value; renderPeople(); }
+function searchPeople(v){ currentSearch=v; renderPeople(); }
+
+function openPerson(id){
+  const p=PEOPLE.find(x=>x.id===id); if(!p)return;
+  document.getElementById('modal-header').innerHTML=`<div class="modal-name">${p.name}</div><div class="modal-meta">${p.dynasty} · ${p.place||'吴中'} · ${p.juan}卷</div>`;
+  document.getElementById('modal-body').innerHTML=`
+    <div class="modal-section"><div class="modal-sec-title">白话简介</div><div class="modal-text">${p.bio}</div></div>
+    ${p.quote?`<div class="modal-section"><div class="modal-sec-title">原文摘录</div><div class="modal-quote">${p.quote}</div></div>`:''}
+    <div class="modal-section"><div class="modal-sec-title">标签</div><div class="person-tags" style="margin-top:6px">
+      <span class="tag ${JUAN_COLORS[p.juan]||'tag-li'}">${p.juan}</span>
+      ${p.values.map(v=>`<span class="tag" style="background:rgba(100,80,40,0.08);color:var(--ink-faint);border:1px solid var(--border)">${v}</span>`).join('')}
+      ${p.tags.map(t=>`<span class="tag" style="background:rgba(45,107,82,0.07);color:var(--jade);border:1px solid rgba(45,107,82,0.2)">${t}</span>`).join('')}
+    </div></div>`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e){ if(e.target===document.getElementById('modal'))closeModalBtn(); }
+function closeModalBtn(){ document.getElementById('modal').classList.remove('open'); }
+
+function showSection(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  const names=['people','timeline','map','stats','quiz'];
+  const idx=names.indexOf(name);
+  if(idx>=0)document.querySelectorAll('.nav-link')[idx].classList.add('active');
+  if(name==='timeline')renderTimeline();
+  if(name==='map')renderMap();
+  if(name==='stats')renderStats();
+}
+
+function renderTimeline(){
+  const ds=[
+    {name:'春秋',count:7,color:'#6b5a40'},{name:'西汉/东汉',count:8,color:'#7a3a2a'},
+    {name:'三国',count:4,color:'#4a6b3a'},{name:'两晋',count:9,color:'#3a5a6b'},
+    {name:'南朝',count:19,color:'#6b3a5a'},{name:'唐',count:17,color:'#8b4020'},
+    {name:'宋',count:40,color:'#2d6b52'},{name:'元',count:10,color:'#6b5a20'},{name:'明',count:30,color:'#8b2020'},
+  ];
+  const max=40;
+  document.getElementById('timeline-content').innerHTML=`
+    <div style="margin-bottom:2rem">
+      <div style="font-size:12px;color:var(--ink-faint);letter-spacing:1px;margin-bottom:1.2rem">横轴长度代表人数比例</div>
+      ${ds.map(d=>`<div class="dynasty-row">
+        <div class="dynasty-name">${d.name}</div>
+        <div class="dynasty-track"><div class="dynasty-fill" style="width:${Math.max(8,d.count/max*100)}%;background:${d.color}">${d.count>=8?d.count+'人':''}</div></div>
+        <div class="dynasty-count">${d.count<8?d.count+'人':''}</div>
+      </div>`).join('')}
+    </div>
+    <div style="border:1px solid var(--border);padding:1.25rem;background:var(--paper-dark)">
+      <div style="font-size:11px;color:var(--ink-faint);letter-spacing:2px;margin-bottom:8px">编录说明</div>
+      <div style="font-size:13px;color:var(--ink-light);line-height:2">
+        本志现收录贤人<strong>一百四十四</strong>位，以宋代为最（四十人），其次明代（三十人）、唐代（十七人）。<br>
+        分<span style="color:var(--red)">孝友</span>、<span style="color:var(--jade)">忠义</span>、<span style="color:var(--gold)">吏治</span>三卷，各卷陆续整理补录中。
+      </div>
+    </div>`;
+}
+
+function renderMap(){
+  const locs=[
+    {name:'江苏苏州',count:94,x:340,y:180},{name:'江苏昆山',count:12,x:405,y:168},
+    {name:'江苏常熟',count:10,x:362,y:128},{name:'江苏嘉定',count:10,x:448,y:172},
+    {name:'浙江绍兴',count:3,x:338,y:302},{name:'浙江嘉兴',count:2,x:368,y:248},{name:'江苏常州',count:1,x:258,y:142},
+  ];
+  const max=94;
+  document.getElementById('map-container').innerHTML=`
+    <div class="map-tooltip" id="map-tooltip"></div>
+    <svg class="map-svg" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+      <rect width="600" height="400" fill="#dce8d8"/>
+      <path d="M50,50 Q150,30 250,60 Q350,80 450,50 Q550,30 580,80 L580,350 Q500,370 400,350 Q300,380 200,360 Q100,380 50,350 Z" fill="#c8d8c0" opacity="0.6"/>
+      <ellipse cx="280" cy="200" rx="55" ry="40" fill="#7aadcc" opacity="0.6"/>
+      <text x="280" y="204" text-anchor="middle" font-size="11" fill="#3a6a8a" font-family="Noto Serif SC,serif">太湖</text>
+      <path d="M50,100 Q150,90 250,110 Q300,115 350,100 Q420,85 580,105" stroke="#7aadcc" stroke-width="3" fill="none" opacity="0.7"/>
+      ${[1,2,3,4,5].map(i=>`<line x1="0" y1="${i*70}" x2="600" y2="${i*70}" stroke="rgba(100,80,40,0.07)" stroke-width="0.5"/>`).join('')}
+      ${[1,2,3,4,5,6,7].map(i=>`<line x1="${i*80}" y1="0" x2="${i*80}" y2="400" stroke="rgba(100,80,40,0.07)" stroke-width="0.5"/>`).join('')}
+      ${locs.map(loc=>{
+        const r=Math.max(8,Math.sqrt(loc.count/max)*38);
+        return `<g style="cursor:pointer" onclick="showMapTip(event,'${loc.name}',${loc.count})">
+          <circle cx="${loc.x}" cy="${loc.y}" r="${r}" fill="#a07840" opacity="0.72" stroke="rgba(245,240,232,0.8)" stroke-width="1.5"/>
+          <text x="${loc.x}" y="${loc.y+4}" text-anchor="middle" font-size="11" fill="white" font-family="Noto Serif SC,serif">${loc.count}</text>
+          <text x="${loc.x}" y="${loc.y+r+14}" text-anchor="middle" font-size="10" fill="var(--ink)" font-family="Noto Serif SC,serif">${loc.name.replace('江苏','').replace('浙江','')}</text>
+        </g>`;
+      }).join('')}
+      <text x="550" y="372" font-size="16" fill="rgba(100,80,40,0.35)" font-family="serif">北</text>
+      <line x1="557" y1="356" x2="557" y2="342" stroke="rgba(100,80,40,0.35)" stroke-width="1"/>
+      <polygon points="557,342 554,353 557,350 560,353" fill="rgba(100,80,40,0.35)"/>
+    </svg>`;
+  document.getElementById('map-legend').innerHTML=locs.map(l=>`<div class="map-legend-item"><div style="width:${Math.max(6,Math.sqrt(l.count/94)*14)}px;height:${Math.max(6,Math.sqrt(l.count/94)*14)}px;border-radius:50%;background:#a07840;opacity:0.7;"></div>${l.name} ${l.count}人</div>`).join('');
+}
+
+function showMapTip(e,name,count){
+  const tip=document.getElementById('map-tooltip'); if(!tip)return;
+  tip.style.display='block'; tip.style.left=(e.offsetX+14)+'px'; tip.style.top=(e.offsetY-10)+'px';
+  tip.textContent=name+'：'+count+'人';
+  setTimeout(()=>{tip.style.display='none';},2200);
+}
+
+let chartsRendered=false;
+function renderStats(){
+  if(chartsRendered)return; chartsRendered=true;
+  setTimeout(()=>{
+    new Chart(document.getElementById('chart-juan'),{type:'doughnut',data:{labels:['吏治','孝友','忠义'],datasets:[{data:[78,33,33],backgroundColor:['#a07840','#8b2020','#2d6b52'],borderWidth:2,borderColor:'#f5f0e8'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+    new Chart(document.getElementById('chart-dynasty'),{type:'bar',data:{labels:['春秋','汉','三国','晋','南朝','唐','宋','元','明'],datasets:[{data:[7,8,4,9,19,17,40,10,30],backgroundColor:'#a07840',borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11},color:'#7a6a55'}},y:{ticks:{font:{size:11},color:'#7a6a55'}}}}});
+    new Chart(document.getElementById('chart-values'),{type:'bar',data:{labels:['廉','孝','忠','仁','义','直','勤','贤','悌','睦'],datasets:[{data:[65,35,30,28,18,15,20,12,5,5],backgroundColor:['#8b2020','#2d6b52','#a07840','#4a6b8a','#6b4a8a','#6b8a4a','#4a8a6b','#6b6b4a','#8a6b4a','#8a4a6b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:12},color:'#7a6a55'}},y:{ticks:{font:{size:11},color:'#7a6a55'}}}}});
+  },100);
+}
+
+const QUESTIONS=[
+  {q:"遇到不公之事，你会如何回应？",opts:[{text:"直言上书，据理力争，哪怕触怒上位者",score:{忠:2,直:2}},{text:"默默记在心里，等待合适时机",score:{廉:1}},{text:"先照顾好身边的人，再谋大局",score:{孝:2,仁:1}},{text:"以行动代替语言，以实绩说话",score:{勤:2,廉:1}}]},
+  {q:"对于家族与亲人，你最看重的是？",opts:[{text:"父母之命，尽孝道，这是做人根本",score:{孝:3}},{text:"兄弟情义，同生共死，血浓于水",score:{悌:2,义:1}},{text:"教育后代，传承家风",score:{仁:2,廉:1}},{text:"家国情怀，忠君报国先于小家",score:{忠:2}}]},
+  {q:"担任一方官员，你最优先做什么？",opts:[{text:"减轻百姓赋役，让民休养生息",score:{仁:2,廉:1}},{text:"整顿吏治，打击豪强贪腐",score:{廉:3,直:1}},{text:"兴修水利，造福地方百年",score:{勤:2,仁:1}},{text:"以文教化，兴学传道",score:{贤:2,廉:1}}]},
+  {q:"面对个人荣辱得失，你的态度是？",opts:[{text:"淡泊名利，宁愿退隐也不同流合污",score:{廉:3}},{text:"君子坦荡，只要问心无愧",score:{直:2,廉:1}},{text:"只要能为百姓做实事，名声无所谓",score:{仁:2,勤:1}},{text:"忠心事主，荣辱与共",score:{忠:2,义:1}}]},
+  {q:"你最欣赏哪种处世风格？",opts:[{text:"铁骨铮铮，一身正气，书生意气",score:{忠:1,直:2}},{text:"温润孝悌，敦亲睦邻",score:{孝:2,仁:1}},{text:"通达权变，以柔克刚",score:{廉:1,仁:2}},{text:"才华横溢，淡泊高洁",score:{贤:2,廉:2}}]},
+];
+const PERSONAS=[
+  {name:"范仲淹",dynasty:"北宋",traits:{忠:3,仁:3,直:2},desc:"心怀天下苍生，敢于直言进谏，无论处江湖之远还是居庙堂之高，忧国忧民之心始终如一。"},
+  {name:"况钟",dynasty:"明代",traits:{廉:4,勤:3,直:2},desc:"为官清廉，断案如神，十三年苏州知府，以铁面无私著称，被百姓奉为「况青天」。"},
+  {name:"韦应物",dynasty:"唐代",traits:{廉:3,仁:3},desc:"诗风恬淡，为政清廉，任苏州刺史期间体恤民情，留下了感人至深的诗篇。"},
+  {name:"陈遗",dynasty:"东晋",traits:{孝:4,仁:2},desc:"至孝之人，无论身处何种险境，始终惦念母亲的饮食起居，以一袋锅巴感动上天。"},
+  {name:"顾野王",dynasty:"南朝梁",traits:{廉:2,贤:3,勤:3},desc:"博学鸿儒，著《玉篇》传世，以文字之学守护华夏文明，淡泊功名，学问照千秋。"},
+  {name:"文徵明",dynasty:"明代",traits:{廉:3,贤:4},desc:"书画双绝，一生淡泊名利，以艺术修身，以清廉处世，「吴中四才子」中最为雅正。"},
+];
+
+function startQuiz(){ quizAnswers=[]; currentQ=0; document.getElementById('quiz-intro').style.display='none'; document.getElementById('quiz-body').style.display='block'; document.getElementById('quiz-result').style.display='none'; renderQuestion(); }
+
+function renderQuestion(){
+  const prog=document.getElementById('quiz-progress');
+  prog.innerHTML=QUESTIONS.map((q,i)=>`<div class="progress-dot ${i<currentQ?'done':i===currentQ?'active':''}"></div>`).join('');
+  const q=QUESTIONS[currentQ];
+  document.getElementById('quiz-question-wrap').innerHTML=`
+    <div class="quiz-q-label">第 ${currentQ+1} 问 · 共 ${QUESTIONS.length} 问</div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-option" onclick="selectOpt(${i})">${o.text}</button>`).join('')}</div>`;
+}
+
+function selectOpt(idx){ quizAnswers.push(QUESTIONS[currentQ].opts[idx].score); currentQ++; if(currentQ>=QUESTIONS.length)showResult(); else renderQuestion(); }
+
+function showResult(){
+  const totals={};
+  quizAnswers.forEach(s=>Object.entries(s).forEach(([k,v])=>totals[k]=(totals[k]||0)+v));
+  let best=PERSONAS[0],bestScore=-1;
+  PERSONAS.forEach(p=>{ let s=0; Object.entries(p.traits).forEach(([k,v])=>s+=(totals[k]||0)*v); if(s>bestScore){bestScore=s;best=p;} });
+  const topTraits=Object.entries(totals).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+  document.getElementById('quiz-body').style.display='none';
+  const res=document.getElementById('quiz-result');
+  res.style.display='block';
+  res.innerHTML=`
+    <div style="font-size:11px;color:var(--ink-faint);letter-spacing:3px;margin-bottom:10px">镜中所见</div>
+    <div class="result-name">${best.name}</div>
+    <div class="result-dynasty">${best.dynasty} · 吴中贤人</div>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px 0">
+      ${topTraits.map(t=>`<span class="tag" style="background:rgba(100,80,40,0.1);color:var(--gold);border:1px solid var(--gold);padding:3px 12px;font-size:12px;letter-spacing:1px">${t}</span>`).join('')}
+    </div>
+    <div class="result-desc">${best.desc}</div>
+    <button class="btn-primary" onclick="openPerson(${PEOPLE.find(p=>p.name===best.name)?.id||13})">查阅列传</button>
+    <button class="btn-ghost" style="margin-left:8px" onclick="restartQuiz()">重新问心</button>`;
+}
+
+function restartQuiz(){ document.getElementById('quiz-intro').style.display='block'; document.getElementById('quiz-body').style.display='none'; document.getElementById('quiz-result').style.display='none'; }
+
+renderPeople();
+</script>
